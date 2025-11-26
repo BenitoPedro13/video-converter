@@ -1,0 +1,51 @@
+# apiVersion specifies which version of the Kubernetes API to use.
+# 'apps/v1' is the standard, stable version for application workloads like Deployments.
+apiVersion: apps/v1
+# kind specifies the type of Kubernetes object this manifest creates.
+# Here, we are creating a Deployment.
+kind: Deployment
+# metadata contains information about the Deployment, like its name and labels.
+metadata:
+  # The name of our Deployment object.
+  name: webapp-deployment
+  # Labels are key-value pairs that are attached to objects. They are used to
+  # organize and select groups of objects.
+  labels:
+    app: web-app
+# spec is the most important section. It defines the 'desired state' for the Deployment.
+spec:
+  # replicas specifies how many identical copies (Pods) of your application you want to run.
+  # We start with 1 for simplicity.
+  replicas: 1
+  # selector tells the Deployment which Pods to manage.
+  # It finds all Pods that have the 'app: web-app' label.
+  selector:
+    matchLabels:
+      app: web-app
+  # template defines the blueprint for the Pods that this Deployment will create.
+  template:
+    metadata:
+      # The Pods created by this Deployment will get this label.
+      # This is how the 'selector' above is able to find them.
+      labels:
+        app: web-app
+    spec:
+      # containers is a list of one or more containers that should run inside the Pod.
+      # Most of the time, you will only have one container per Pod.
+      containers:
+        - name: web-app # The name of the container within the Pod.
+          # image is the most critical part. It specifies the Docker image to run.
+          # IMPORTANT: For a real cluster, this image must be in a container registry
+          # like Docker Hub or AWS ECR.
+          # For a local cluster like minikube, you can build the image directly
+          # into its local Docker daemon.
+          image: agendog/web-app:latest
+          # ports specifies the network ports the container exposes.
+          ports:
+            - containerPort: 3000 # The port your Next.js app runs on inside the container.
+          # env defines the environment variables to be set in the container.
+          envFrom:
+            - configMapRef:
+                name: webapp-config
+            - secretRef:
+                name: webapp-secret

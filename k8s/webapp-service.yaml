@@ -1,0 +1,18 @@
+# apiVersion specifies which version of the Kubernetes API to use.
+# 'v1' is the core API version for basic resources like Services.
+apiVersion: v1
+# kind specifies the type of Kubernetes object this manifest creates.
+# Here, we are creating a Service.
+kind: Service
+# metadata contains information about the Service, like its name and labels.
+metadata:
+  # The name of our Service object.
+  name: webapp-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer

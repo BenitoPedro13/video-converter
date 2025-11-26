@@ -1,0 +1,91 @@
+name: video-converter
+
+services:
+  # ============================================
+  # PostgreSQL Database (Auth Service)
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: vc-postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vc-network
+
+  # ============================================
+  # MongoDB (Converter Service)
+  # ============================================
+  mongo:
+    image: mongo:7.0
+    container_name: vc-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - vc-network
+
+  # ============================================
+  # RabbitMQ (Message Queue)
+  # ============================================
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: vc-rabbitmq
+    restart: unless-stopped
+    ports:
+      - '5672:5672' # AMQP protocol port
+      - '15672:15672' # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - vc-network
+
+  # ============================================
+  # Optional: pgAdmin (Postgres UI)
+  # ============================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: vc-pgadmin
+    restart: unless-stopped
+    ports:
+      - '5050:80'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres
+    networks:
+      - vc-network
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  vc-network:
+    driver: bridge
+
+# ============================================
+# Volumes
+# ============================================
+volumes:
+  postgres-data:
+    driver: local
+  mongo-data:
+    driver: local
