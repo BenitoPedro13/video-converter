@@ -17,10 +17,10 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 2: Authentication Service (Auth + Postgres)
 
-- [ ] **Database Connection**: Connect `auth-service` to PostgreSQL.
-- [ ] **User Entity**: Define User schema (email, password hash).
-- [ ] **Auth Logic**: Implement JWT strategy, Login, and Register endpoints.
-- [ ] **GRPC/HTTP Interface**: Expose a method for the Gateway to validate tokens.
+- [x] **Database Connection**: Connect `auth-service` to PostgreSQL.
+- [x] **User Entity**: Define User schema (email, password hash).
+- [x] **Auth Logic**: Implement JWT strategy, Login, and Register endpoints.
+- [x] **HTTP Interface**: Expose a method for the Gateway to validate tokens.
 
 ## Phase 3: API Gateway & Routing
 
