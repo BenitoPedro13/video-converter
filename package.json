@@ -1,5 +1,6 @@
 {
-  "name": "pnpm-monorepo-v2",
+  "name": "video-converter-monorepo",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

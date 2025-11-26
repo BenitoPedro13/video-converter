@@ -4,12 +4,12 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 1: Project Setup & Infrastructure
 
-- [ ] **Monorepo Initialization**: Ensure `pnpm` workspace is correctly configured.
+- [x] **Monorepo Initialization**: Ensure `pnpm` workspace is correctly configured.
 - [ ] **Docker Compose**: Create a `docker-compose.yml` that spins up:
   - PostgreSQL
   - MongoDB
   - RabbitMQ
-- [ ] **Base Service Setup**: Initialize NestJS applications for:
+- [x] **Base Service Setup**: Initialize NestJS applications for:
   - `gateway-service`
   - `auth-service`
   - `converter-service`
