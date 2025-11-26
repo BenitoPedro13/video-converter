@@ -1,95 +1,88 @@
-# Agendog
+# Video to MP3 Converter (Microservices)
 
-Agendog is a modern, full-stack application built as a pnpm monorepo. It features a Next.js frontend and utilizes Docker to manage backend services for a clean and consistent development and production environment.
+A scalable, microservices-based application for converting video files to MP3 audio. Built with NestJS, RabbitMQ, PostgreSQL, and MongoDB.
 
-## ✨ Features
+## 🏗 Architecture
 
-- **Monorepo Architecture**: Managed with `pnpm` workspaces for scalable code sharing and management.
-- **Next.js Frontend**: A React framework for production-grade applications.
-- **TypeScript**: For robust, type-safe code across the entire stack.
-- **Dockerized Services**: Easy-to-manage backend services (like PostgreSQL) for development and production.
-- **Consistent Tooling**: `ESLint` and `Prettier` for high-quality, consistent code.
+The system consists of the following services:
 
-## ✅ Prerequisites
+- **API Gateway**: Entry point for all client requests. Handles routing and initial auth validation.
+- **Auth Service**: Manages user authentication and identity (PostgreSQL).
+- **Converter Service**: Handles video uploads, storage (MongoDB GridFS), and conversion logic.
+- **Notification Service**: Sends email/push notifications upon task completion.
 
-Before you begin, ensure you have the following installed on your system:
+Infrastructure:
 
-- [Node.js](https://nodejs.org/en/) (v20 or higher)
-- [pnpm](https://pnpm.io/installation) (v9 or higher)
-- [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/install/)
+- **RabbitMQ**: Message broker for asynchronous communication between services.
+- **PostgreSQL**: Relational database for user data.
+- **MongoDB**: NoSQL database for file storage and metadata.
 
-## 🚀 Getting Started: Development Environment
+For more details, check the [Architecture Plan](./docs/architecture_plan.md).
 
-Follow these steps to get your local development environment up and running.
+## 🚀 Getting Started
 
-### 1. Clone the Repository
+### Prerequisites
 
-```bash
-git clone <your-repository-url>
-cd agendog
-```
+- [Node.js](https://nodejs.org/) (v20+)
+- [pnpm](https://pnpm.io/) (v9+)
+- [Docker](https://www.docker.com/) & Docker Compose
 
-### 2. Install Dependencies
-
-Install all project dependencies using `pnpm`.
+### 1. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### 3. Set Up Environment Variables
+### 2. Start Infrastructure
 
-Create a `.env` file in the root of the project by copying the example file. This file is required for the application to connect to the database.
-
-```bash
-cp .env.example .env
-```
-
-The default values in `.env.example` are configured to work with the local Docker setup.
-
-### 4. Start Backend Services
-
-Start the PostgreSQL database and pgAdmin using Docker. These services run in the background.
+Start the databases and message broker using Docker:
 
 ```bash
-pnpm docker:dev
+pnpm docker:up
 ```
 
-This will start:
+This will spin up:
 
-- **PostgreSQL Database**: Accessible on `localhost:5432`.
-- **pgAdmin UI**: Accessible at `http://localhost:5050`.
+- Postgres (Port 5432)
+- MongoDB (Port 27017)
+- RabbitMQ (Port 5672, UI: 15672)
+- pgAdmin (Port 5050)
 
-### 5. Run the Frontend Application
+### 3. Run Services (Development)
 
-In a separate terminal, run the Next.js development server.
+Start all microservices in development mode (watch mode):
 
 ```bash
 pnpm dev
 ```
 
-Your application is now running at **[http://localhost:3000](http://localhost:3000)** with hot-reloading enabled.
+This runs `start:dev` for all apps in parallel.
 
-## 🛑 Stopping the Environment
+## 🛠 Available Scripts
 
-- To stop the Next.js development server, press `Ctrl + C` in its terminal.
-- To stop the Docker services (database and pgAdmin), run:
+| Script                | Description                                 |
+| :-------------------- | :------------------------------------------ |
+| `pnpm dev`            | Start all microservices in development mode |
+| `pnpm build`          | Build all services                          |
+| `pnpm test`           | Run tests across all services               |
+| `pnpm docker:up`      | Start infrastructure (DBs, RabbitMQ)        |
+| `pnpm docker:down`    | Stop infrastructure                         |
+| `pnpm docker:logs`    | View infrastructure logs                    |
+| `pnpm db:auth:shell`  | Open psql shell for Auth DB                 |
+| `pnpm db:mongo:shell` | Open mongosh shell for Mongo DB             |
 
-```bash
-pnpm docker:dev:down
+## 📂 Project Structure
+
 ```
-
-## 🛠️ Available Scripts
-
-Here are some of the most common scripts available from the root directory:
-
-| Script                 | Description                                            |
-| :--------------------- | :----------------------------------------------------- |
-| `pnpm dev`             | Starts the Next.js app locally for development.        |
-| `pnpm docker:dev`      | Starts backend services (db, pgAdmin) via Docker.      |
-| `pnpm docker:dev:down` | Stops all development Docker services.                 |
-| `pnpm docker:prod`     | Builds and starts the full production stack in Docker. |
-| `pnpm format`          | Formats all code with Prettier.                        |
-| `pnpm lint`            | Lints the entire codebase.                             |
-
-For more details on the Docker setup, see `README.Docker.md`.
+.
+├── apps/                   # Microservices source code
+│   ├── auth-service/
+│   ├── converter-service/
+│   ├── gateway-service/
+│   └── notification-service/
+├── docs/                   # Documentation
+├── k8s/                    # Kubernetes manifests (future)
+├── packages/               # Shared libraries (future)
+├── compose.yaml            # Docker Compose configuration
+└── package.json            # Root scripts and dependencies
+```

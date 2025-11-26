@@ -5,7 +5,7 @@ This document outlines the step-by-step plan to build the microservices architec
 ## Phase 1: Project Setup & Infrastructure
 
 - [x] **Monorepo Initialization**: Ensure `pnpm` workspace is correctly configured.
-- [ ] **Docker Compose**: Create a `docker-compose.yml` that spins up:
+- [x] **Docker Compose**: Create a `compose.yaml` that spins up:
   - PostgreSQL
   - MongoDB
   - RabbitMQ

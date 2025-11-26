@@ -2,28 +2,27 @@
   "name": "video-converter-monorepo",
   "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "Microservices-based Video to MP3 Converter",
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
     "lint": "pnpm -r lint",
     "format": "prettier --write .",
     "test": "pnpm -r test",
-    "dev": "pnpm --filter web-app dev",
-    "build": "pnpm --filter web-app build",
-    "start": "pnpm --filter web-app start",
-    "docker:dev": "docker compose --profile development up -d",
-    "docker:dev:down": "docker compose --profile development down -v",
-    "docker:prod": "docker compose --profile production up -d --build",
-    "docker:prod:down": "docker compose --profile production down -v",
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel --filter \"./apps/*\" start:dev",
+    "start:prod": "pnpm -r --parallel --filter \"./apps/*\" start:prod",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f",
-    "db:shell": "docker compose exec postgres psql -U postgres -d auth_db"
+    "db:auth:shell": "docker compose exec postgres psql -U postgres -d auth_db",
+    "db:mongo:shell": "docker compose exec mongo mongosh -u root -p root"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": ">=22.17.1"
+    "node": ">=20.0.0"
   },
   "packageManager": "pnpm@10.23.0",
   "devDependencies": {
@@ -33,9 +32,6 @@
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
