@@ -24,8 +24,8 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 3: API Gateway & Routing
 
-- [ ] **Proxy Logic**: Configure Gateway to route requests to downstream services.
-- [ ] **Auth Guard**: Implement a global guard in Gateway that calls `auth-service` to validate requests.
+- [x] **Proxy Logic**: Configure Gateway to route requests to downstream services.
+- [x] **Auth Guard**: Implement a global guard in Gateway that calls `auth-service` to validate requests.
 
 ## Phase 4: Converter Service (Upload & Storage)
 
