@@ -82,20 +82,23 @@ export class ProxyController {
       const result = await this.proxyService.forwardRequest(
         targetUrl,
         req.method,
-        req.body,
-        req.headers,
-        req.query,
+        req.body as Record<string, unknown>,
+        req.headers as Record<string, unknown>,
+        req.query as Record<string, unknown>,
       );
 
       return res.json(result);
-    } catch (error) {
-      if (error.status) {
-        return res.status(error.status).json(error.data);
+    } catch (error: unknown) {
+      if (error instanceof HttpException) {
+        return res.status(error.getStatus()).json(error.getResponse());
       }
+
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
 
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'Error forwarding request',
-        error: error.message,
+        error: errorMessage,
       });
     }
   }

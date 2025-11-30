@@ -66,7 +66,7 @@ export interface TestUser {
 }
 
 export const createTestUser = (): TestUser => ({
-  email: `test-${Date.now()}@example.com`,
+  email: `test-${Date.now()}-${Math.floor(Math.random() * 1000)}@example.com`,
   password: 'Test123!@#',
   name: 'Test User',
 });

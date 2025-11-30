@@ -10,6 +10,8 @@ import { ConfigService } from '@nestjs/config';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { firstValueFrom } from 'rxjs';
 
+import { Request } from 'express';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -29,7 +31,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const authHeader = request.headers['authorization'];
 
     if (!authHeader) {
@@ -49,10 +51,14 @@ export class AuthGuard implements CanActivate {
       );
 
       // Attach user data to request
-      request.user = response.data;
+      request.user = response.data as Record<string, unknown>;
       return true;
-    } catch (error) {
-      throw new UnauthorizedException(error, 'Invalid or expired token');
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token');
     }
   }
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: Record<string, unknown>;
 }
