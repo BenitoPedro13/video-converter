@@ -11,8 +11,6 @@ export const jwtFactory = (configService: ConfigService): JwtModuleOptions => {
     throw new Error('JWT_SECRET is not defined in environment variables');
   }
 
-  console.log('JWT_SECRET from ConfigService:', secret); // Added for debugging
-
   return {
     secret,
     signOptions: { expiresIn },

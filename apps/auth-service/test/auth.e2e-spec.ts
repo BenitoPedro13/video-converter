@@ -1,8 +1,18 @@
+import { Server } from 'http';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from './../src/prisma/prisma.service';
+
+interface AuthResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -20,6 +30,7 @@ describe('AuthController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
     prismaService = app.get<PrismaService>(PrismaService);
@@ -38,31 +49,54 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
+  const getServer = () => app.getHttpServer() as Server;
+
   describe('/auth/register (POST)', () => {
     it('should register a new user', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .post('/auth/register')
         .send(testUser)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('access_token');
-          expect(res.body.user).toHaveProperty('id');
-          expect(res.body.user.email).toBe(testUser.email);
-          expect(res.body.user.name).toBe(testUser.name);
+          const body = res.body as AuthResponse;
+          expect(body).toHaveProperty('access_token');
+          expect(body.user).toHaveProperty('id');
+          expect(body.user.email).toBe(testUser.email);
+          expect(body.user.name).toBe(testUser.name);
         });
     });
 
     it('should fail to register duplicate user', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .post('/auth/register')
         .send(testUser)
         .expect(401);
+    });
+
+    it('should fail to register with invalid email', () => {
+      return request(getServer())
+        .post('/auth/register')
+        .send({
+          ...testUser,
+          email: 'invalid-email',
+        })
+        .expect(400);
+    });
+
+    it('should fail to register with short password', () => {
+      return request(getServer())
+        .post('/auth/register')
+        .send({
+          ...testUser,
+          password: '123',
+        })
+        .expect(400);
     });
   });
 
   describe('/auth/login (POST)', () => {
     it('should login successfully with valid credentials', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .post('/auth/login')
         .send({
           email: testUser.email,
@@ -70,13 +104,14 @@ describe('AuthController (e2e)', () => {
         })
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('access_token');
-          expect(res.body.user.email).toBe(testUser.email);
+          const body = res.body as AuthResponse;
+          expect(body).toHaveProperty('access_token');
+          expect(body.user.email).toBe(testUser.email);
         });
     });
 
     it('should fail login with invalid password', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .post('/auth/login')
         .send({
           email: testUser.email,
@@ -86,7 +121,7 @@ describe('AuthController (e2e)', () => {
     });
 
     it('should fail login with non-existent user', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .post('/auth/login')
         .send({
           email: 'nonexistent@example.com',
@@ -94,40 +129,52 @@ describe('AuthController (e2e)', () => {
         })
         .expect(401);
     });
+
+    it('should fail login with invalid email format', () => {
+      return request(getServer())
+        .post('/auth/login')
+        .send({
+          email: 'invalid-email',
+          password: 'password123',
+        })
+        .expect(400);
+    });
   });
 
   describe('/auth/validate (GET)', () => {
     let accessToken: string;
 
     beforeAll(async () => {
-      const loginResponse = await request(app.getHttpServer())
+      const loginResponse = await request(getServer())
         .post('/auth/login')
         .send({
           email: testUser.email,
           password: testUser.password,
         });
-      accessToken = loginResponse.body.access_token;
+      const body = loginResponse.body as AuthResponse;
+      accessToken = body.access_token;
     });
 
     it('should validate valid token', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .get('/auth/validate')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200)
         .expect((res) => {
-          expect(res.body.email).toBe(testUser.email);
+          const body = res.body as AuthResponse['user'];
+          expect(body.email).toBe(testUser.email);
         });
     });
 
     it('should fail with invalid token', () => {
-      return request(app.getHttpServer())
+      return request(getServer())
         .get('/auth/validate')
         .set('Authorization', 'Bearer invalid-token')
         .expect(401);
     });
 
     it('should fail without token', () => {
-      return request(app.getHttpServer()).get('/auth/validate').expect(401);
+      return request(getServer()).get('/auth/validate').expect(401);
     });
   });
 });
