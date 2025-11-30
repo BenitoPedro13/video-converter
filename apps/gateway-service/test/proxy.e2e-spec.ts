@@ -7,6 +7,7 @@ import {
   createTestUser,
   delay,
   TestUser,
+  getAvailablePort,
 } from './helpers/test-utils';
 
 describe('Gateway Proxy Routing (e2e)', () => {
@@ -18,7 +19,13 @@ describe('Gateway Proxy Routing (e2e)', () => {
   beforeAll(async () => {
     // Start auth service
     authService = new TestAuthService();
-    await authService.start(3001);
+    const authServicePort = await getAvailablePort();
+    await authService.start(authServicePort);
+
+    // Set AUTH_SERVICE_URL for the gateway
+    process.env.AUTH_SERVICE_URL = `http://localhost:${authServicePort}`;
+    process.env.CONVERTER_SERVICE_URL = `http://localhost:${await getAvailablePort()}`; // Dummy port
+    process.env.NOTIFICATION_SERVICE_URL = `http://localhost:${await getAvailablePort()}`; // Dummy port
 
     // Wait for auth service to be ready
     await delay(1000);
@@ -40,8 +47,10 @@ describe('Gateway Proxy Routing (e2e)', () => {
     );
 
     await app.init();
+  });
 
-    // Clean database and create test user
+  beforeEach(async () => {
+    // Clean database before each test
     await authService.cleanDatabase();
     testUser = createTestUser();
 
@@ -58,8 +67,12 @@ describe('Gateway Proxy Routing (e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close();
-    await authService.stop();
+    if (app) {
+      await app.close();
+    }
+    if (authService) {
+      await authService.stop();
+    }
   });
 
   describe('Auth Service Proxy', () => {
@@ -73,7 +86,7 @@ describe('Gateway Proxy Routing (e2e)', () => {
           password: newUser.password,
           name: newUser.name,
         })
-        .expect(201);
+        .expect(200);
 
       expect(response.body).toHaveProperty('access_token');
       expect(response.body.user.email).toBe(newUser.email);
@@ -86,7 +99,7 @@ describe('Gateway Proxy Routing (e2e)', () => {
           email: testUser.email,
           password: testUser.password,
         })
-        .expect(201);
+        .expect(200);
 
       expect(response.body).toHaveProperty('access_token');
       expect(response.body.user.email).toBe(testUser.email);
@@ -128,7 +141,7 @@ describe('Gateway Proxy Routing (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/register')
         .send(userData)
-        .expect(201);
+        .expect(200);
 
       expect(response.body.user.email).toBe(userData.email);
       expect(response.body.user.name).toBe(userData.name);

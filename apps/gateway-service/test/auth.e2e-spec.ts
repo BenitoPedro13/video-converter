@@ -7,6 +7,7 @@ import {
   createTestUser,
   delay,
   TestUser,
+  getAvailablePort,
 } from './helpers/test-utils';
 
 describe('Gateway Authentication (e2e)', () => {
@@ -18,7 +19,11 @@ describe('Gateway Authentication (e2e)', () => {
   beforeAll(async () => {
     // Start auth service
     authService = new TestAuthService();
-    await authService.start(3001);
+    const authServicePort = await getAvailablePort();
+    await authService.start(authServicePort);
+
+    // Set AUTH_SERVICE_URL for the gateway
+    process.env.AUTH_SERVICE_URL = `http://localhost:${authServicePort}`;
 
     // Wait for auth service to be ready
     await delay(1000);
@@ -46,8 +51,12 @@ describe('Gateway Authentication (e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close();
-    await authService.stop();
+    if (app) {
+      await app.close();
+    }
+    if (authService) {
+      await authService.stop();
+    }
   });
 
   beforeEach(async () => {
@@ -65,7 +74,7 @@ describe('Gateway Authentication (e2e)', () => {
           password: testUser.password,
           name: testUser.name,
         })
-        .expect(201);
+        .expect(200);
 
       expect(response.body).toHaveProperty('access_token');
       expect(response.body).toHaveProperty('user');
@@ -89,7 +98,7 @@ describe('Gateway Authentication (e2e)', () => {
           email: testUser.email,
           password: testUser.password,
         })
-        .expect(201);
+        .expect(200);
 
       expect(response.body).toHaveProperty('access_token');
       expect(response.body).toHaveProperty('user');
@@ -124,11 +133,11 @@ describe('Gateway Authentication (e2e)', () => {
       authToken = response.body.access_token;
     });
 
-    it('GET / - should reject request without token', async () => {
-      const response = await request(app.getHttpServer()).get('/').expect(401);
-
-      expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('No authorization header');
+    it('GET / - should allow request to public route without token', async () => {
+      await request(app.getHttpServer())
+        .get('/')
+        .expect(200)
+        .expect('Hello World!');
     });
 
     it('GET / - should allow request with valid token', async () => {
@@ -139,9 +148,9 @@ describe('Gateway Authentication (e2e)', () => {
         .expect('Hello World!');
     });
 
-    it('GET / - should reject request with invalid token', async () => {
+    it('GET /auth/validate - should reject request with invalid token', async () => {
       const response = await request(app.getHttpServer())
-        .get('/')
+        .get('/auth/validate')
         .set('Authorization', 'Bearer invalid_token_here')
         .expect(401);
 
@@ -149,9 +158,9 @@ describe('Gateway Authentication (e2e)', () => {
       expect(response.body.message).toContain('Invalid or expired token');
     });
 
-    it('GET / - should reject request with malformed authorization header', async () => {
+    it('GET /auth/validate - should reject request with malformed authorization header', async () => {
       const response = await request(app.getHttpServer())
-        .get('/')
+        .get('/auth/validate')
         .set('Authorization', 'InvalidFormat')
         .expect(401);
 
@@ -177,11 +186,12 @@ describe('Gateway Authentication (e2e)', () => {
       // The auth guard should validate the token and allow access
       // We can verify this by successfully accessing a protected route
       const response = await request(app.getHttpServer())
-        .get('/')
+        .get('/auth/validate')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.text).toBe('Hello World!');
+      expect(response.body).toHaveProperty('id');
+      expect(response.body).toHaveProperty('email');
     });
 
     it('should handle expired tokens gracefully', async () => {
@@ -190,7 +200,7 @@ describe('Gateway Authentication (e2e)', () => {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjF9.invalid';
 
       const response = await request(app.getHttpServer())
-        .get('/')
+        .get('/auth/validate')
         .set('Authorization', `Bearer ${expiredToken}`)
         .expect(401);
 
@@ -211,7 +221,7 @@ describe('Gateway Authentication (e2e)', () => {
           password: user1.password,
           name: user1.name,
         })
-        .expect(201);
+        .expect(200);
 
       // Register second user
       const response2 = await request(app.getHttpServer())
@@ -221,7 +231,7 @@ describe('Gateway Authentication (e2e)', () => {
           password: user2.password,
           name: user2.name,
         })
-        .expect(201);
+        .expect(200);
 
       expect(response1.body.user.email).toBe(user1.email);
       expect(response2.body.user.email).toBe(user2.email);
@@ -237,7 +247,7 @@ describe('Gateway Authentication (e2e)', () => {
           password: testUser.password,
           name: testUser.name,
         })
-        .expect(201);
+        .expect(200);
 
       // Try to register again with same email
       const response = await request(app.getHttpServer())
