@@ -44,9 +44,9 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 6: Notification Service
 
-- [ ] **Queue Listener**: Connect `notification-service` to RabbitMQ.
-- [ ] **Event Handling**: Listen for `conversion_completed` events.
-- [ ] **Email Sender**: Implement a mock email sender (console log) or real integration (SendGrid/SMTP) to notify the user.
+- [x] **Queue Listener**: Connect `notification-service` to RabbitMQ.
+- [x] **Event Handling**: Listen for `conversion_completed` events.
+- [x] **Email Sender**: Implement a mock email sender (console log) or real integration (SendGrid/SMTP) to notify the user.
 
 ## Phase 7: End-to-End Integration & Testing
 

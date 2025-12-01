@@ -95,4 +95,56 @@ describe('ProxyService', () => {
       await expect(service.forwardRequest('url', 'GET')).rejects.toThrow(error);
     });
   });
+
+  describe('streamRequest', () => {
+    it('should forward request and return stream', async () => {
+      const targetUrl = 'http://service/stream';
+      const method = 'GET';
+      const headers = { authorization: 'token' };
+      const mockStream = { pipe: jest.fn() };
+
+      const response: AxiosResponse = {
+        data: mockStream,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {
+          headers: new AxiosHeaders(),
+        },
+      };
+
+      mockHttpService.request.mockReturnValue(of(response));
+
+      const result: unknown = await service.streamRequest(
+        targetUrl,
+        method,
+        headers,
+      );
+
+      expect(result).toBe(mockStream);
+      expect(mockHttpService.request).toHaveBeenCalledWith({
+        method,
+        url: targetUrl,
+        headers: { ...headers, host: undefined },
+        responseType: 'stream',
+      });
+    });
+
+    it('should throw HttpException if axios error with response', async () => {
+      const errorResponse = { message: 'Not Found' };
+      const error = {
+        isAxiosError: true,
+        response: {
+          data: errorResponse,
+          status: 404,
+        },
+      };
+
+      mockHttpService.request.mockReturnValue(throwError(() => error));
+
+      await expect(service.streamRequest('url', 'GET')).rejects.toThrow(
+        HttpException,
+      );
+    });
+  });
 });

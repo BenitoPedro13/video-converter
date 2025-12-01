@@ -3,6 +3,7 @@ import {
   Controller,
   Req,
   Res,
+  Get,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
@@ -48,6 +49,36 @@ export class ProxyController {
   }
 
   // Converter service routes (protected)
+  @Get('converter/download/:filename')
+  async downloadFile(@Req() req: Request, @Res() res: Response) {
+    const path = req.url.replace('/converter', '');
+    const serviceUrl = this.configService.get<string>('CONVERTER_SERVICE_URL');
+    if (!serviceUrl) {
+      throw new HttpException(
+        'Service URL not configured: CONVERTER_SERVICE_URL',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const targetUrl = `${serviceUrl}${path}`;
+
+    try {
+      const stream = (await this.proxyService.streamRequest(
+        targetUrl,
+        req.method,
+        req.headers as Record<string, unknown>,
+      )) as NodeJS.ReadableStream;
+
+      stream.pipe(res);
+    } catch (error) {
+      // Error handling
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: errorMessage });
+    }
+  }
+
   @All('converter/*')
   async converterRoutes(@Req() req: Request, @Res() res: Response) {
     const path = req.url.replace('/converter', '');
