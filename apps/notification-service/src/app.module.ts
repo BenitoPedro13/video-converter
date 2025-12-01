@@ -9,7 +9,7 @@ import { EmailService } from './email/email.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: ['.env', '../../.env'],
     }),
   ],
   controllers: [AppController, NotificationController],

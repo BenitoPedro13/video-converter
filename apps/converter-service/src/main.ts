@@ -19,6 +19,6 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  await app.listen(3002);
+  await app.listen(process.env.CONVERTER_SERVICE_PORT ?? 3003);
 }
-bootstrap();
+void bootstrap();

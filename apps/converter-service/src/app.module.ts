@@ -10,7 +10,7 @@ import { ConversionModule } from './conversion/conversion.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: ['.env', '../../.env'],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

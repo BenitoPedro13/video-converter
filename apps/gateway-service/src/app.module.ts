@@ -12,7 +12,7 @@ import { ProxyModule } from './proxy/proxy.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: ['.env', '../../.env'],
     }),
     HttpModule,
     AuthModule,

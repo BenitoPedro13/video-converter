@@ -1,5 +1,4 @@
 /// <reference types="next" />
-/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference types="next/image-types/global" />
 /// <reference path="./.next/types/routes.d.ts" />
 
