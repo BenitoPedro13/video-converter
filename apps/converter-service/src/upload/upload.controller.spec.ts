@@ -46,7 +46,9 @@ describe('UploadController', () => {
 
       const result = controller.uploadFile(mockFile);
 
-      expect(service.handleFileUpload).toHaveBeenCalledWith(mockFile);
+      expect(service.handleFileUpload.bind(service)).toHaveBeenCalledWith(
+        mockFile,
+      );
       expect(result).toEqual(expectedResult);
     });
   });

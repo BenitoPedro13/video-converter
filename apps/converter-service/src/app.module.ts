@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UploadModule } from './upload/upload.module';
+import { ConversionModule } from './conversion/conversion.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UploadModule } from './upload/upload.module';
       inject: [ConfigService],
     }),
     UploadModule,
+    ConversionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

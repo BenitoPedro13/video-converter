@@ -36,11 +36,11 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 5: Asynchronous Conversion (Queue & Worker)
 
-- [ ] **RabbitMQ Setup**: Configure RabbitMQ connection in `converter-service`.
-- [ ] **Producer**: When a file is uploaded, publish a message to the `video_conversion_queue`.
-- [ ] **Consumer**: Create a worker (can be part of `converter-service` or separate) that listens to the queue.
-- [ ] **FFmpeg Integration**: Use `fluent-ffmpeg` to convert the video stream from GridFS to MP3.
-- [ ] **Save Result**: Store the resulting MP3 back to GridFS.
+- [x] **RabbitMQ Setup**: Configure RabbitMQ connection in `converter-service`.
+- [x] **Producer**: When a file is uploaded, publish a message to the `video_conversion_queue`.
+- [x] **Consumer**: Create a worker (can be part of `converter-service` or separate) that listens to the queue.
+- [x] **FFmpeg Integration**: Use `fluent-ffmpeg` to convert the video stream from GridFS to MP3.
+- [x] **Save Result**: Store the resulting MP3 back to GridFS.
 
 ## Phase 6: Notification Service
 

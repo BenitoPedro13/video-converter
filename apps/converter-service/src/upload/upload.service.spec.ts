@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UploadService, GridFsFile } from './upload.service';
 import { BadRequestException } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 
 describe('UploadService', () => {
   let service: UploadService;
-  let clientProxy: ClientProxy;
 
   const mockClientProxy = {
     emit: jest.fn(),
@@ -23,7 +21,6 @@ describe('UploadService', () => {
     }).compile();
 
     service = module.get<UploadService>(UploadService);
-    clientProxy = module.get<ClientProxy>('VIDEO_CONVERSION_SERVICE');
   });
 
   it('should be defined', () => {
@@ -46,7 +43,7 @@ describe('UploadService', () => {
         filename: mockFile.filename,
       });
 
-      expect(clientProxy.emit).toHaveBeenCalledWith('video_uploaded', {
+      expect(mockClientProxy.emit).toHaveBeenCalledWith('video_uploaded', {
         fileId: mockFile.id,
         filename: mockFile.filename,
       });
