@@ -1,4 +1,5 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 export interface GridFsFile extends Express.Multer.File {
   id: string;
@@ -6,10 +7,20 @@ export interface GridFsFile extends Express.Multer.File {
 
 @Injectable()
 export class UploadService {
+  constructor(
+    @Inject('VIDEO_CONVERSION_SERVICE') private readonly client: ClientProxy,
+  ) {}
+
   handleFileUpload(file: GridFsFile) {
     if (!file) {
       throw new BadRequestException('File is required');
     }
+
+    this.client.emit('video_uploaded', {
+      fileId: file.id,
+      filename: file.filename,
+    });
+
     return {
       message: 'File uploaded successfully',
       fileId: file.id,
