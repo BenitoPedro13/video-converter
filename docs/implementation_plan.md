@@ -50,8 +50,8 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 7: End-to-End Integration & Testing
 
-- [ ] **Integration Test**: Upload a video via Gateway -> Verify Auth -> Check Mongo -> Verify Conversion -> Check Notification.
-- [ ] **Download Endpoint**: Add an endpoint to download the converted MP3.
+- [x] **Integration Test**: Upload a video via Gateway -> Verify Auth -> Check Mongo -> Verify Conversion -> Check Notification.
+- [x] **Download Endpoint**: Add an endpoint to download the converted MP3.
 
 ## Phase 8: Deployment (Optional/Future)
 
