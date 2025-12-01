@@ -6,6 +6,7 @@ A scalable, microservices-based application for converting video files to MP3 au
 
 The system consists of the following services:
 
+- **Frontend**: Next.js application for user interaction (Dashboard, Upload, Auth).
 - **API Gateway**: Entry point for all client requests. Handles routing and initial auth validation.
 - **Auth Service**: Manages user authentication and identity (PostgreSQL).
 - **Converter Service**: Handles video uploads, storage (MongoDB GridFS), and conversion logic.
@@ -76,6 +77,7 @@ This runs `start:dev` for all apps in parallel.
 ```
 .
 ├── apps/                   # Microservices source code
+│   ├── frontend/           # Next.js Frontend App
 │   ├── auth-service/
 │   ├── converter-service/
 │   ├── gateway-service/
