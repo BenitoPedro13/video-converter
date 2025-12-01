@@ -4,14 +4,13 @@ import { UploadService, GridFsFile } from './upload.service';
 
 describe('UploadController', () => {
   let controller: UploadController;
-  let service: UploadService;
 
   const mockUploadService = {
     handleFileUpload: jest.fn(),
   };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const testingModule: TestingModule = await Test.createTestingModule({
       controllers: [UploadController],
       providers: [
         {
@@ -21,8 +20,7 @@ describe('UploadController', () => {
       ],
     }).compile();
 
-    controller = module.get<UploadController>(UploadController);
-    service = module.get<UploadService>(UploadService);
+    controller = testingModule.get<UploadController>(UploadController);
   });
 
   it('should be defined', () => {
@@ -46,9 +44,7 @@ describe('UploadController', () => {
 
       const result = controller.uploadFile(mockFile);
 
-      expect(service.handleFileUpload.bind(service)).toHaveBeenCalledWith(
-        mockFile,
-      );
+      expect(mockUploadService.handleFileUpload).toHaveBeenCalledWith(mockFile);
       expect(result).toEqual(expectedResult);
     });
   });
