@@ -1,13 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, mongo } from 'mongoose';
 import ffmpeg from 'fluent-ffmpeg';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class ConversionService {
   private readonly logger = new Logger(ConversionService.name);
 
-  constructor(@InjectConnection() private readonly connection: Connection) {}
+  constructor(
+    @InjectConnection() private readonly connection: Connection,
+    @Inject('NOTIFICATION_SERVICE')
+    private readonly notificationClient: ClientProxy,
+  ) {}
 
   async convertVideo(fileId: string, filename: string): Promise<void> {
     this.logger.log(`Starting conversion for file: ${filename} (${fileId})`);
@@ -34,6 +39,11 @@ export class ConversionService {
         })
         .on('end', () => {
           this.logger.log(`Conversion completed for file: ${filename}`);
+          this.notificationClient.emit('conversion_completed', {
+            fileId,
+            filename,
+            status: 'completed',
+          });
           resolve();
         })
         .pipe(uploadStream);
