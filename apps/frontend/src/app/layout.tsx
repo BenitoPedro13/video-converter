@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { NotificationProvider } from '@/components/ui/notification-provider';
 import { Toaster } from '@/components/ui/toast';
+import { AuthProvider } from '@/context/auth-context';
 
 const inter = FontSans({
   subsets: ['latin'],
@@ -35,9 +36,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
-        {children}
-        <NotificationProvider />
-        <Toaster />
+        <AuthProvider>
+          {children}
+          <NotificationProvider />
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

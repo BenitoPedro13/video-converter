@@ -32,7 +32,12 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
-    const authHeader = request.headers['authorization'];
+    let authHeader = request.headers['authorization'];
+
+    // If no header, check query param (useful for downloads)
+    if (!authHeader && typeof request.query.token === 'string') {
+      authHeader = `Bearer ${request.query.token}`;
+    }
 
     if (!authHeader) {
       throw new UnauthorizedException('No authorization header provided');

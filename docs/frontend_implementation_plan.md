@@ -55,15 +55,10 @@ Todas as requisições devem ser feitas para o **Gateway Service**.
   - **Payload**: `{ "email": "user@example.com", "password": "securePass" }`
   - **Sucesso**: Redirecionar para Login.
 
-- **Login (`/login`)**:
-  - **Endpoint**: `POST /auth/login`
-  - **Payload**: `{ "email": "user@example.com", "password": "securePass" }`
-  - **Sucesso**: Recebe um JWT (`access_token`).
-  - **Ação**: Armazenar o token (localStorage ou Cookie) e redirecionar para `/dashboard`.
-
-### 2. Upload de Arquivo
-
-**Serviço Alvo**: Converter Service (via Gateway)
+    - **Autenticação:**
+      - **Registro:** `POST /auth/register` (email, password). Redireciona para login.
+      - **Login:** `POST /auth/login` (email, password). Retorna `access_token` JWT. O token deve ser armazenado (localStorage/Cookie) e usado no cabeçalho `Authorization` para rotas protegidas. Redireciona para dashboard.
+    - **Upload de Arquivo:\*\***Serviço Alvo\*\*: Converter Service (via Gateway)
 
 - **Interface**: Página `/dashboard`.
 - **Ação**: Usuário seleciona um arquivo de vídeo e clica em "Converter".
