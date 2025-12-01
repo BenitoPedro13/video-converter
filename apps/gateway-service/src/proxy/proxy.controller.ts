@@ -70,6 +70,9 @@ export class ProxyController {
 
       stream.pipe(res);
     } catch (error) {
+      if (error instanceof HttpException) {
+        return res.status(error.getStatus()).json(error.getResponse());
+      }
       // Error handling
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';

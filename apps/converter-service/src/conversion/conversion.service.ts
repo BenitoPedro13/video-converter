@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, mongo } from 'mongoose';
 import ffmpeg from 'fluent-ffmpeg';
@@ -93,7 +93,7 @@ export class ConversionService {
     const files = await cursor.toArray();
 
     if (files.length === 0) {
-      throw new Error('File not found');
+      throw new NotFoundException('File not found');
     }
 
     return bucket.openDownloadStream(files[0]._id);

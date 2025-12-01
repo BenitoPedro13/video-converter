@@ -6,17 +6,13 @@ import path from 'path';
 const GATEWAY_URL = 'http://localhost:3000';
 const TEST_EMAIL = `test-${Date.now()}@example.com`;
 const TEST_PASSWORD = 'password123';
-const TEST_FILE_PATH = path.join(__dirname, 'test-video.mp4');
+const INPUT_FILE = path.join(__dirname, 'sample-5s.mp4');
+const OUTPUT_FILE = path.join(__dirname, 'converted-sample-5s.mp3');
 
 async function runIntegrationTest() {
+  console.log('Starting Integration Test...');
+
   try {
-    console.log('Starting Integration Test...');
-
-    // 0. Create a dummy video file
-    if (!fs.existsSync(TEST_FILE_PATH)) {
-      fs.writeFileSync(TEST_FILE_PATH, 'dummy video content');
-    }
-
     // 1. Register
     console.log(`1. Registering user: ${TEST_EMAIL}`);
     await axios.post(`${GATEWAY_URL}/auth/register`, {
@@ -37,19 +33,24 @@ async function runIntegrationTest() {
 
     // 3. Upload Video
     console.log('3. Uploading video...');
+    if (!fs.existsSync(INPUT_FILE)) {
+      throw new Error(`Input file not found: ${INPUT_FILE}`);
+    }
+
     const formData = new FormData();
-    formData.append('file', fs.createReadStream(TEST_FILE_PATH));
+    formData.append('file', fs.createReadStream(INPUT_FILE));
 
     const uploadResponse = await axios.post(
       `${GATEWAY_URL}/converter/upload`,
       formData,
       {
         headers: {
-          ...formData.getHeaders(),
           Authorization: `Bearer ${token}`,
+          ...formData.getHeaders(),
         },
       },
     );
+
     const { fileId, filename } = uploadResponse.data;
     console.log(
       `   Upload successful. FileID: ${fileId}, Filename: ${filename}`,
@@ -58,37 +59,56 @@ async function runIntegrationTest() {
     // 4. Poll for Download
     console.log('4. Polling for download...');
     const maxRetries = 20;
-    const delay = 1000; // 1 second
+    const retryDelay = 2000; // 2 seconds
 
     for (let i = 0; i < maxRetries; i++) {
+      console.log(`   Attempt ${i + 1}/${maxRetries}...`);
       try {
-        console.log(`   Attempt ${i + 1}/${maxRetries}...`);
-        const downloadUrl = `${GATEWAY_URL}/converter/download/${filename}`;
-        await axios.get(downloadUrl, {
-          headers: { Authorization: `Bearer ${token}` },
-          responseType: 'stream',
+        const downloadResponse = await axios.get(
+          `${GATEWAY_URL}/converter/download/${filename}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            responseType: 'stream',
+          },
+        );
+
+        // If successful, save the file
+        const writer = fs.createWriteStream(OUTPUT_FILE);
+        downloadResponse.data.pipe(writer);
+
+        await new Promise((resolve, reject) => {
+          writer.on('finish', resolve);
+          writer.on('error', reject);
         });
 
-        console.log('   Download successful!');
-
-        // Cleanup
-        if (fs.existsSync(TEST_FILE_PATH)) {
-          fs.unlinkSync(TEST_FILE_PATH);
-        }
-
+        console.log(`   Download successful! Saved to ${OUTPUT_FILE}`);
         console.log('Integration Test PASSED!');
         return;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error) && error.response) {
-          if (error.response.status === 404) {
-            // File not found yet (conversion pending), wait and retry
-            await new Promise((resolve) => setTimeout(resolve, delay));
-          } else if (error.response.status === 500) {
-            // Conversion might have failed or service error
-            await new Promise((resolve) => setTimeout(resolve, delay));
-          } else {
-            throw error;
-          }
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        console.log('Caught error:', errorMessage);
+        if (error && typeof error === 'object' && 'response' in error) {
+          const axiosError = error as { response?: { status?: number } };
+          console.log('Response status:', axiosError.response?.status);
+          console.log(
+            'Response status type:',
+            typeof axiosError.response?.status,
+          );
+        } else {
+          console.log('No response object in error');
+        }
+
+        if (
+          (error &&
+            typeof error === 'object' &&
+            'response' in error &&
+            (error as { response?: { status?: number } }).response?.status ===
+              404) ||
+          errorMessage.includes('404')
+        ) {
+          // File not ready yet, wait and retry
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
         } else {
           throw error;
         }
@@ -97,15 +117,13 @@ async function runIntegrationTest() {
 
     throw new Error('Timeout waiting for conversion.');
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Integration Test FAILED:', error.message);
-    } else {
-      console.error('Integration Test FAILED:', error);
-    }
-
-    if (axios.isAxiosError(error) && error.response) {
-      console.error('Response data:', error.response.data);
-      console.error('Response status:', error.response.status);
+    console.error('Integration Test FAILED:', error);
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as {
+        response?: { status?: number; data?: unknown };
+      };
+      console.error('Response status:', axiosError.response?.status);
+      console.error('Response data:', axiosError.response?.data);
     }
     process.exit(1);
   }

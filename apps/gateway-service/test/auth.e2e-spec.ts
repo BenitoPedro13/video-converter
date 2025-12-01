@@ -10,6 +10,25 @@ import {
   getAvailablePort,
 } from './helpers/test-utils';
 
+interface AuthResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
+interface ErrorResponse {
+  statusCode?: number;
+  message: string;
+}
+
+interface ValidateResponse {
+  id: string;
+  email: string;
+}
+
 describe('Gateway Authentication (e2e)', () => {
   let app: INestApplication;
   let authService: TestAuthService;
@@ -76,11 +95,12 @@ describe('Gateway Authentication (e2e)', () => {
         })
         .expect(200);
 
-      expect(response.body).toHaveProperty('access_token');
-      expect(response.body).toHaveProperty('user');
-      expect(response.body.user.email).toBe(testUser.email);
-      expect(response.body.user.name).toBe(testUser.name);
-      expect(response.body.user).toHaveProperty('id');
+      const body = response.body as AuthResponse;
+      expect(body).toHaveProperty('access_token');
+      expect(body).toHaveProperty('user');
+      expect(body.user.email).toBe(testUser.email);
+      expect(body.user.name).toBe(testUser.name);
+      expect(body.user).toHaveProperty('id');
     });
 
     it('POST /auth/login - should login existing user', async () => {
@@ -100,9 +120,10 @@ describe('Gateway Authentication (e2e)', () => {
         })
         .expect(200);
 
-      expect(response.body).toHaveProperty('access_token');
-      expect(response.body).toHaveProperty('user');
-      expect(response.body.user.email).toBe(testUser.email);
+      const body = response.body as AuthResponse;
+      expect(body).toHaveProperty('access_token');
+      expect(body).toHaveProperty('user');
+      expect(body.user.email).toBe(testUser.email);
     });
 
     it('POST /auth/login - should reject invalid credentials', async () => {
@@ -114,8 +135,9 @@ describe('Gateway Authentication (e2e)', () => {
         })
         .expect(401);
 
-      expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('Invalid credentials');
+      const body = response.body as ErrorResponse;
+      expect(body).toHaveProperty('message');
+      expect(body.message).toContain('Invalid credentials');
     });
   });
 
@@ -130,7 +152,8 @@ describe('Gateway Authentication (e2e)', () => {
           name: testUser.name,
         });
 
-      authToken = response.body.access_token;
+      const body = response.body as AuthResponse;
+      authToken = body.access_token;
     });
 
     it('GET / - should allow request to public route without token', async () => {
@@ -154,8 +177,9 @@ describe('Gateway Authentication (e2e)', () => {
         .set('Authorization', 'Bearer invalid_token_here')
         .expect(401);
 
-      expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('Invalid or expired token');
+      const body = response.body as ErrorResponse;
+      expect(body).toHaveProperty('message');
+      expect(body.message).toContain('Invalid or expired token');
     });
 
     it('GET /auth/validate - should reject request with malformed authorization header', async () => {
@@ -179,7 +203,8 @@ describe('Gateway Authentication (e2e)', () => {
           name: testUser.name,
         });
 
-      authToken = response.body.access_token;
+      const body = response.body as AuthResponse;
+      authToken = body.access_token;
     });
 
     it('should validate token and attach user data to request', async () => {
@@ -190,8 +215,9 @@ describe('Gateway Authentication (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body).toHaveProperty('id');
-      expect(response.body).toHaveProperty('email');
+      const body = response.body as ValidateResponse;
+      expect(body).toHaveProperty('id');
+      expect(body).toHaveProperty('email');
     });
 
     it('should handle expired tokens gracefully', async () => {
@@ -204,7 +230,8 @@ describe('Gateway Authentication (e2e)', () => {
         .set('Authorization', `Bearer ${expiredToken}`)
         .expect(401);
 
-      expect(response.body.message).toContain('Invalid or expired token');
+      const body = response.body as ErrorResponse;
+      expect(body.message).toContain('Invalid or expired token');
     });
   });
 
@@ -233,9 +260,11 @@ describe('Gateway Authentication (e2e)', () => {
         })
         .expect(200);
 
-      expect(response1.body.user.email).toBe(user1.email);
-      expect(response2.body.user.email).toBe(user2.email);
-      expect(response1.body.access_token).not.toBe(response2.body.access_token);
+      const body1 = response1.body as AuthResponse;
+      const body2 = response2.body as AuthResponse;
+      expect(body1.user.email).toBe(user1.email);
+      expect(body2.user.email).toBe(user2.email);
+      expect(body1.access_token).not.toBe(body2.access_token);
     });
 
     it('should reject duplicate email registration', async () => {
@@ -259,7 +288,8 @@ describe('Gateway Authentication (e2e)', () => {
         })
         .expect(401);
 
-      expect(response.body.message).toContain('User already exists');
+      const body = response.body as ErrorResponse;
+      expect(body.message).toContain('User already exists');
     });
   });
 });

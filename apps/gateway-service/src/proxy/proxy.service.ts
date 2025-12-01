@@ -2,6 +2,7 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { AxiosRequestConfig, isAxiosError } from 'axios';
+import { Readable } from 'stream';
 
 @Injectable()
 export class ProxyService {
@@ -64,12 +65,45 @@ export class ProxyService {
       return response.data;
     } catch (error) {
       if (isAxiosError(error) && error.response) {
+        let errorData: unknown = error.response.data;
+
+        if (this.isReadableStream(errorData)) {
+          try {
+            const rawData = await this.readStream(errorData);
+            try {
+              errorData = JSON.parse(rawData);
+            } catch {
+              errorData = rawData;
+            }
+          } catch {
+            // fallback if reading stream fails
+          }
+        }
+
         throw new HttpException(
-          error.response.data as string | Record<string, unknown>,
+          errorData as string | Record<string, unknown>,
           error.response.status,
         );
       }
       throw error;
     }
+  }
+
+  private isReadableStream(obj: unknown): obj is Readable {
+    return (
+      !!obj &&
+      typeof obj === 'object' &&
+      typeof (obj as Record<string, unknown>).on === 'function' &&
+      typeof (obj as Record<string, unknown>).pipe === 'function'
+    );
+  }
+
+  private async readStream(stream: Readable): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+      stream.on('error', reject);
+      stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    });
   }
 }

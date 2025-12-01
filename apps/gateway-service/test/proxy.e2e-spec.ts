@@ -10,6 +10,25 @@ import {
   getAvailablePort,
 } from './helpers/test-utils';
 
+interface AuthResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
+interface ErrorResponse {
+  statusCode?: number;
+  message: string;
+}
+
+interface ValidateResponse {
+  id: string;
+  email: string;
+}
+
 describe('Gateway Proxy Routing (e2e)', () => {
   let app: INestApplication;
   let authService: TestAuthService;
@@ -63,7 +82,8 @@ describe('Gateway Proxy Routing (e2e)', () => {
         name: testUser.name,
       });
 
-    authToken = response.body.access_token;
+    const body = response.body as AuthResponse;
+    authToken = body.access_token;
   });
 
   afterAll(async () => {
@@ -88,8 +108,9 @@ describe('Gateway Proxy Routing (e2e)', () => {
         })
         .expect(200);
 
-      expect(response.body).toHaveProperty('access_token');
-      expect(response.body.user.email).toBe(newUser.email);
+      const body = response.body as AuthResponse;
+      expect(body).toHaveProperty('access_token');
+      expect(body.user.email).toBe(newUser.email);
     });
 
     it('should proxy POST /auth/login to auth-service', async () => {
@@ -101,8 +122,9 @@ describe('Gateway Proxy Routing (e2e)', () => {
         })
         .expect(200);
 
-      expect(response.body).toHaveProperty('access_token');
-      expect(response.body.user.email).toBe(testUser.email);
+      const body = response.body as AuthResponse;
+      expect(body).toHaveProperty('access_token');
+      expect(body.user.email).toBe(testUser.email);
     });
 
     it('should proxy GET /auth/validate to auth-service (protected)', async () => {
@@ -111,9 +133,10 @@ describe('Gateway Proxy Routing (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body).toHaveProperty('id');
-      expect(response.body).toHaveProperty('email');
-      expect(response.body.email).toBe(testUser.email);
+      const body = response.body as ValidateResponse;
+      expect(body).toHaveProperty('id');
+      expect(body).toHaveProperty('email');
+      expect(body.email).toBe(testUser.email);
     });
 
     it('should forward error responses from auth-service', async () => {
@@ -125,8 +148,9 @@ describe('Gateway Proxy Routing (e2e)', () => {
         })
         .expect(401);
 
-      expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('Invalid credentials');
+      const body = response.body as ErrorResponse;
+      expect(body).toHaveProperty('message');
+      expect(body.message).toContain('Invalid credentials');
     });
   });
 
@@ -143,8 +167,9 @@ describe('Gateway Proxy Routing (e2e)', () => {
         .send(userData)
         .expect(200);
 
-      expect(response.body.user.email).toBe(userData.email);
-      expect(response.body.user.name).toBe(userData.name);
+      const body = response.body as AuthResponse;
+      expect(body.user.email).toBe(userData.email);
+      expect(body.user.name).toBe(userData.name);
     });
 
     it('should forward authorization headers correctly', async () => {
