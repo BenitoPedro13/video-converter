@@ -82,7 +82,13 @@ export class ProxyController {
   @All('converter/*')
   async converterRoutes(@Req() req: Request, @Res() res: Response) {
     const path = req.url.replace('/converter', '');
-    return this.forwardToService('CONVERTER_SERVICE_URL', path, req, res);
+    const contentType = req.headers['content-type'];
+    const body: unknown =
+      contentType && contentType.includes('multipart/form-data')
+        ? req
+        : req.body;
+
+    return this.forwardToService('CONVERTER_SERVICE_URL', path, req, res, body);
   }
 
   // Notification service routes (protected)
@@ -97,6 +103,7 @@ export class ProxyController {
     path: string,
     req: Request,
     res: Response,
+    body?: unknown,
   ) {
     try {
       const serviceUrl = this.configService.get<string>(serviceUrlKey);
@@ -113,7 +120,7 @@ export class ProxyController {
       const result = await this.proxyService.forwardRequest(
         targetUrl,
         req.method,
-        req.body as Record<string, unknown>,
+        body || req.body,
         req.headers as Record<string, unknown>,
         req.query as Record<string, unknown>,
       );

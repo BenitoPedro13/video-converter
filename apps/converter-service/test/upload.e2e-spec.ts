@@ -24,10 +24,15 @@ describe('UploadController (e2e)', () => {
       .attach('file', Buffer.from('dummy video content'), 'test-video.mp4')
       .expect(201)
       .then((response) => {
-        expect(response.body).toHaveProperty('fileId');
-        expect(response.body).toHaveProperty('filename');
+        const body = response.body as {
+          fileId: string;
+          filename: string;
+          message: string;
+        };
+        expect(body).toHaveProperty('fileId');
+        expect(body).toHaveProperty('filename');
 
-        expect(response.body.message).toBe('File uploaded successfully');
+        expect(body.message).toBe('File uploaded successfully');
       });
   }, 20000);
 });

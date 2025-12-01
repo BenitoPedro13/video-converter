@@ -10,7 +10,7 @@ export class ProxyService {
   async forwardRequest(
     targetUrl: string,
     method: string,
-    body?: Record<string, unknown>,
+    body?: unknown,
     headers?: Record<string, unknown>,
     queryParams?: Record<string, unknown>,
   ): Promise<unknown> {

@@ -16,6 +16,7 @@ export class UploadService {
       throw new BadRequestException('File is required');
     }
 
+    console.log('Emitting video_uploaded event for file:', file.filename);
     this.client.emit('video_uploaded', {
       fileId: file.id,
       filename: file.filename,

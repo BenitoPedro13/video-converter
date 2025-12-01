@@ -11,6 +11,7 @@ export class ConversionController {
   async handleVideoUploaded(
     @Payload() data: { fileId: string; filename: string },
   ) {
+    console.log('Received video_uploaded event:', data);
     await this.conversionService.convertVideo(data.fileId, data.filename);
   }
 

@@ -1,0 +1,129 @@
+
+> video-converter-monorepo@1.0.0 dev /Users/benitoxavier/Documents/personal/video-converter
+> pnpm -r --parallel --filter "./apps/*" start:dev
+
+Scope: 4 of 5 workspace projects
+apps/auth-service start:dev$ nest start --watch
+apps/converter-service start:dev$ nest start --watch
+apps/gateway-service start:dev$ nest start --watch
+apps/notification-service start:dev$ nest start --watch
+apps/converter-service start:dev: [2J[3J[H[[90m2:46:39 AM[0m] Starting compilation in watch mode...
+apps/auth-service start:dev: [2J[3J[H[[90m2:46:39 AM[0m] Starting compilation in watch mode...
+apps/gateway-service start:dev: [2J[3J[H[[90m2:46:39 AM[0m] Starting compilation in watch mode...
+apps/notification-service start:dev: [2J[3J[H[[90m2:46:39 AM[0m] Starting compilation in watch mode...
+apps/notification-service start:dev: [[90m2:46:41 AM[0m] Found 0 errors. Watching for file changes.
+apps/gateway-service start:dev: [[90m2:46:41 AM[0m] Found 0 errors. Watching for file changes.
+apps/converter-service start:dev: [[90m2:46:41 AM[0m] Found 0 errors. Watching for file changes.
+apps/notification-service start:dev: [32m[Nest] 92707  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+apps/notification-service start:dev: [32m[Nest] 92707  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +7ms[39m
+apps/notification-service start:dev: [32m[Nest] 92707  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/notification-service start:dev: [32m[Nest] 92707  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +7ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mHttpModule dependencies initialized[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mProxyModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/notification-service start:dev: /Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/@nestjs+config@4.0.2_@nestjs+common@11.1.9_class-transformer@0.5.1_class-validator@0.14_da401ac158088c6b30d38a6f48340a01/node_modules/@nestjs/config/dist/config.service.js:132
+apps/notification-service start:dev:             throw new TypeError(`Configuration key "${propertyPath.toString()}" does not exist`);
+apps/notification-service start:dev:                   ^
+apps/notification-service start:dev: TypeError: Configuration key "RABBITMQ_URI" does not exist
+apps/notification-service start:dev:     at ConfigService.getOrThrow (/Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/@nestjs+config@4.0.2_@nestjs+common@11.1.9_class-transformer@0.5.1_class-validator@0.14_da401ac158088c6b30d38a6f48340a01/node_modules/@nestjs/config/dist/config.service.js:132:19)
+apps/notification-service start:dev:     at bootstrap (/Users/benitoxavier/Documents/personal/video-converter/apps/notification-service/src/main.ts:13:28)
+apps/notification-service start:dev: Node.js v22.17.1
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +184ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mProxyController {/}:[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/register, ALL} route[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/login, ALL} route[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/validate, ALL} route[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/converter/download/:filename, GET} route[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [33m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/converter/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/converter/*, ALL} route[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: [33m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/notification/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/notification/*, ALL} route[39m[38;5;3m +0ms[39m
+apps/gateway-service start:dev: [32m[Nest] 92713  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1ms[39m
+apps/gateway-service start:dev: Gateway service running on port 3000
+apps/auth-service start:dev: [[90m2:46:42 AM[0m] Found 0 errors. Watching for file changes.
+apps/converter-service start:dev: ffmpegPath: /Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/ffmpeg-static@5.3.0/node_modules/ffmpeg-static/ffmpeg
+apps/converter-service start:dev: Type of ffmpegPath: string
+apps/converter-service start:dev: Resolved ffmpeg path: /Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/ffmpeg-static@5.3.0/node_modules/ffmpeg-static/ffmpeg
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMongooseModule dependencies initialized[39m[38;5;3m +6ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +15ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mClientsModule dependencies initialized[39m[38;5;3m +11ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mClientsModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMongooseCoreModule dependencies initialized[39m[38;5;3m +35ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConversionModule dependencies initialized[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUploadModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestMicroservice] [39m[32mNest microservice successfully started[39m[38;5;3m +17ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUploadController {/upload}:[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/upload, POST} route[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConversionController {/}:[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/download/:filename, GET} route[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +20ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +13ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +8ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +1ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/register, POST} route[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/login, POST} route[39m[38;5;3m +1ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/validate, GET} route[39m[38;5;3m +0ms[39m
+apps/auth-service start:dev: [32m[Nest] 92718  - [39m12/01/2025, 2:46:42 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +33ms[39m
+apps/auth-service start:dev: Auth service running on port 3001
+apps/converter-service start:dev: Emitting video_uploaded event for file: 1764568031224-test-video.mp4
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:47:11 AM [32m    LOG[39m [38;5;3m[ClientProxy] [39m[32mSuccessfully connected to RMQ broker[39m
+apps/converter-service start:dev: [31m[Nest] 92715  - [39m12/01/2025, 2:47:11 AM [31m  ERROR[39m [38;5;3m[ExceptionsHandler] [39mError: File not found
+apps/converter-service start:dev:     at ConversionService.downloadFile [90m(/Users/benitoxavier/Documents/personal/video-converter/apps/converter-service/[39msrc/conversion/conversion.service.ts:94:13[90m)[39m
+apps/converter-service start:dev: [90m    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+apps/converter-service start:dev:     at async ConversionController.downloadFile [90m(/Users/benitoxavier/Documents/personal/video-converter/apps/converter-service/[39msrc/conversion/conversion.controller.ts:23:20[90m)[39m
+apps/converter-service start:dev:     at async /Users/benitoxavier/Documents/personal/video-converter/node_modules/[4m.pnpm[24m/@nestjs+core@11.1.9_@nestjs+common@11.1.9_class-transformer@0.5.1_class-validator@0.14._a08672789b492bd56237ecd226d2cf0d/node_modules/[4m@nestjs[24m/core/router/router-execution-context.js:46:28
+apps/converter-service start:dev:     at async /Users/benitoxavier/Documents/personal/video-converter/node_modules/[4m.pnpm[24m/@nestjs+core@11.1.9_@nestjs+common@11.1.9_class-transformer@0.5.1_class-validator@0.14._a08672789b492bd56237ecd226d2cf0d/node_modules/[4m@nestjs[24m/core/router/router-proxy.js:9:17
+apps/converter-service start:dev: Received video_uploaded event: {
+apps/converter-service start:dev:   fileId: '692d2bdfa0ae820f342e3ed4',
+apps/converter-service start:dev:   filename: '1764568031224-test-video.mp4'
+apps/converter-service start:dev: }
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:47:11 AM [32m    LOG[39m [38;5;3m[ConversionService] [39m[32mStarting conversion for file: 1764568031224-test-video.mp4 (692d2bdfa0ae820f342e3ed4)[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:47:11 AM [32m    LOG[39m [38;5;3m[ConversionService] [39m[32mConversion completed for file: 1764568031224-test-video.mp4[39m
+apps/converter-service start:dev: [32m[Nest] 92715  - [39m12/01/2025, 2:47:11 AM [32m    LOG[39m [38;5;3m[ClientProxy] [39m[32mSuccessfully connected to RMQ broker[39m
+apps/converter-service start:dev: [2J[3J[H[[90m2:48:41 AM[0m] File change detected. Starting incremental compilation...
+apps/converter-service start:dev: [[90m2:48:41 AM[0m] Found 0 errors. Watching for file changes.
+apps/converter-service start:dev: ffmpegPath: /Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/ffmpeg-static@5.3.0/node_modules/ffmpeg-static/ffmpeg
+apps/converter-service start:dev: Type of ffmpegPath: string
+apps/converter-service start:dev: Resolved ffmpeg path: /Users/benitoxavier/Documents/personal/video-converter/node_modules/.pnpm/ffmpeg-static@5.3.0/node_modules/ffmpeg-static/ffmpeg
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMongooseModule dependencies initialized[39m[38;5;3m +5ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +15ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mClientsModule dependencies initialized[39m[38;5;3m +11ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mClientsModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMongooseCoreModule dependencies initialized[39m[38;5;3m +21ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConversionModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUploadModule dependencies initialized[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[NestMicroservice] [39m[32mNest microservice successfully started[39m[38;5;3m +17ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +1ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUploadController {/upload}:[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/upload, POST} route[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConversionController {/}:[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/download/:filename, GET} route[39m[38;5;3m +0ms[39m
+apps/converter-service start:dev: [32m[Nest] 92954  - [39m12/01/2025, 2:48:42 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1ms[39m
+ ELIFECYCLE  Command failed.

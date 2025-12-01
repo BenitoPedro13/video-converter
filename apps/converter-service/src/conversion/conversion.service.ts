@@ -2,16 +2,32 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, mongo } from 'mongoose';
 import ffmpeg from 'fluent-ffmpeg';
+import ffmpegPath from 'ffmpeg-static';
 import { ClientProxy } from '@nestjs/microservices';
+
+console.log('ffmpegPath:', ffmpegPath);
+console.log('Type of ffmpegPath:', typeof ffmpegPath);
+
+// Set ffmpeg path
+if (ffmpegPath) {
+  // Handle if it's an object with default property (CommonJS/ESM interop issue)
+  const path =
+    typeof ffmpegPath === 'string'
+      ? ffmpegPath
+      : (ffmpegPath as unknown as { default: string }).default;
+  console.log('Resolved ffmpeg path:', path);
+  if (path) {
+    ffmpeg.setFfmpegPath(path);
+  }
+}
 
 @Injectable()
 export class ConversionService {
   private readonly logger = new Logger(ConversionService.name);
 
   constructor(
-    @InjectConnection() private readonly connection: Connection,
-    @Inject('NOTIFICATION_SERVICE')
-    private readonly notificationClient: ClientProxy,
+    @InjectConnection() private connection: Connection,
+    @Inject('NOTIFICATION_SERVICE') private notificationClient: ClientProxy,
   ) {}
 
   async convertVideo(fileId: string, filename: string): Promise<void> {
@@ -33,12 +49,13 @@ export class ConversionService {
     return new Promise((resolve, reject) => {
       ffmpeg(downloadStream)
         .toFormat('mp3')
-        .on('error', (err) => {
+        .on('error', (err: Error) => {
           this.logger.error(`Error converting file ${filename}:`, err);
           reject(err);
         })
         .on('end', () => {
           this.logger.log(`Conversion completed for file: ${filename}`);
+          // Emit event
           this.notificationClient.emit('conversion_completed', {
             fileId,
             filename,
