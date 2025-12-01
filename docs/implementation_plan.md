@@ -29,10 +29,10 @@ This document outlines the step-by-step plan to build the microservices architec
 
 ## Phase 4: Converter Service (Upload & Storage)
 
-- [ ] **Database Connection**: Connect `converter-service` to MongoDB.
-- [ ] **GridFS Setup**: Configure MongoDB GridFS for storing binary files.
-- [ ] **Upload Endpoint**: Create an endpoint to accept `multipart/form-data` (video).
-- [ ] **Storage Logic**: Stream uploaded file to GridFS.
+- [x] **Database Connection**: Connect `converter-service` to MongoDB.
+- [x] **GridFS Setup**: Configure MongoDB GridFS for storing binary files.
+- [x] **Upload Endpoint**: Create an endpoint to accept `multipart/form-data` (video).
+- [x] **Storage Logic**: Stream uploaded file to GridFS.
 
 ## Phase 5: Asynchronous Conversion (Queue & Worker)
 
